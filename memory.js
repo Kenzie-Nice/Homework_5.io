@@ -1,53 +1,55 @@
-const images = [
-    'images/Green_tea_Kukicha.jpg', 'images/Green_tea_Kukicha.jpg', 
-    'images/coffee-mug_NVKXLIKJ25.jpg', 'images/coffee-mug_NVKXLIKJ25.jpg', 
-    'images/main-qimg-14ff668b1c08bfab4cc710cdfba6a9d3-lq.jpg', 'images/main-qimg-14ff668b1c08bfab4cc710cdfba6a9d3-lq.jpg', 
-    'images/pexels-photo-6711567.jpeg', 'images/pexels-photo-6711567.jpeg', 
-    'images/tea-black-tea-drink-tea-cup-preview.jpg', 'images/tea-black-tea-drink-tea-cup-preview.jpg', 
-    'images/tea-candy-green-tea-black-tea.jpg', 'images/tea-candy-green-tea-black-tea.jpg'
+const imagePaths = [
+    'images/Green_tea_Kukicha.jpg', 'images/coffee-mug_NVKXLIKJ25.jpg', 
+    'images/main-qimg-14ff668b1c08bfab4cc710cdfba6a9d3-lq.jpg', 'images/pexels-photo-6711567.jpeg', 
+    'images/tea-black-tea-drink-tea-cup-preview.jpg', 'images/tea-candy-green-tea-black-tea.jpg'
 ];
 
-images.sort(() => Math.random() - 0.5); // Shuffle images
+const images = [];
+imagePaths.forEach(img => images.push(img, img));
+images.sort(() => Math.random() - 0.5);
 
 const grid = document.getElementById('grid');
+const blankImage = 'images/blank.jpg';
 let firstPick = null;
 let secondPick = null;
-let lockBoard = false; // Prevents clicking during match check
+let lockBoard = false;
+let attempts = 0;
 
-images.forEach((image, index) => {
+for (let i = 0; i < images.length; i++) {
     let img = document.createElement('img');
-    img.src = 'images/blank.jpg'; // Default blank image
-    img.dataset.index = index;
-    
-    img.onclick = () => {
-        if (lockBoard || img.src !== window.location.origin + '/images/blank.jpg') return; // Prevent clicking revealed images
-
-        img.src = image; // Reveal the clicked image
-
-        if (!firstPick) {
-            firstPick = { img, index };
-        } else {
-            secondPick = { img, index };
-            lockBoard = true; // Prevent more clicks
-            setTimeout(checkMatch, 1000);
-        }
-    };
-
+    img.src = blankImage;
+    img.dataset.index = i;
+    img.onclick = () => handleCardClick(img, i);
     grid.appendChild(img);
-});
+}
+
+function handleCardClick(img, index) {
+    if (lockBoard || img.src.includes(images[index])) return;
+
+    img.src = images[index];
+
+    if (!firstPick) {
+        firstPick = { img, index };
+    } else {
+        secondPick = { img, index };
+        lockBoard = true;
+        attempts++;
+        setTimeout(checkMatch, 1000);
+    }
+}
 
 function checkMatch() {
     if (firstPick.index !== secondPick.index && images[firstPick.index] === images[secondPick.index]) {
-        console.log("It's a match!");
+        firstPick = null;
+        secondPick = null;
+        lockBoard = false;
     } else {
-        console.log("Not a match, flipping back.");
         setTimeout(() => {
-            firstPick.img.src = 'images/blank.jpg'; // Flip back to blank image
-            secondPick.img.src = 'images/blank.jpg'; // Flip back to blank image
+            firstPick.img.src = blankImage;
+            secondPick.img.src = blankImage;
+            firstPick = null;
+            secondPick = null;
+            lockBoard = false;
         }, 500);
     }
-
-    firstPick = null;
-    secondPick = null;
-    lockBoard = false;
 }
