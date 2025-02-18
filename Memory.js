@@ -7,28 +7,28 @@ const images = [
     'images/tea-candy-green-tea-black-tea.jpg', 'images/tea-candy-green-tea-black-tea.jpg'
 ];
 
-images.sort(() => Math.random() - 0.5); // Shuffle images
+images.sort(() => Math.random() - 0.5);
 
 const grid = document.getElementById('grid');
 let firstPick = null;
 let secondPick = null;
-let lockBoard = false; // Prevents clicking during match check
+let lockBoard = false;
 
 images.forEach((image, index) => {
     let img = document.createElement('img');
-    img.src = 'images/blank.jpg'; // Default blank image
+    img.src = 'images/blank.jpg';
     img.dataset.index = index;
     
     img.onclick = () => {
-        if (lockBoard || img.src !== window.location.origin + '/images/blank.jpg') return; // Prevent clicking revealed images
+        if (lockBoard || img.src !== `${window.location.origin}/images/blank.jpg`) return;
 
-        img.src = images[index]; // Reveal image
+        img.src = image;
 
         if (!firstPick) {
             firstPick = { img, index };
         } else {
             secondPick = { img, index };
-            lockBoard = true; // Prevent more clicks
+            lockBoard = true;
             setTimeout(checkMatch, 1000);
         }
     };
@@ -42,7 +42,7 @@ function checkMatch() {
     } else {
         console.log("Not a match, flipping back.");
         setTimeout(() => {
-            firstPick.img.src = 'images/blank.jpg'; 
+            firstPick.img.src = 'images/blank.jpg';
             secondPick.img.src = 'images/blank.jpg';
         }, 500);
     }
