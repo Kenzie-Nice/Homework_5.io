@@ -54,3 +54,6 @@ function checkMatch() {
     secondPick = null;
     lockBoard = false;
 }
+document.querySelectorAll("img").forEach(img => {
+    img.addEventListener("click", () => console.log("Image clicked!"));
+});
