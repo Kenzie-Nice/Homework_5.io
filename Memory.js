@@ -8,14 +8,14 @@ let secondPick = null;
 
 images.forEach((image, index) => {
     let img = document.createElement('img');
-    img.src = 'blank.jpg';
+    img.src = 'images/blank.jpg'; // Updated path
     img.dataset.index = index;
     
     img.onclick = () => {
         if (firstPick && secondPick) return;
-        if (firstPick && firstPick.index === index) return; 
+        if (firstPick && firstPick.index === index) return;
 
-        img.src = images[index];
+        img.src = `images/${images[index]}`; // Updated path
 
         if (!firstPick) {
             firstPick = { img, index };
@@ -28,14 +28,13 @@ images.forEach((image, index) => {
     grid.appendChild(img);
 });
 
-
 function checkMatch() {
     if (firstPick.index !== secondPick.index && images[firstPick.index] === images[secondPick.index]) {
         console.log("It's a match!");
     } else {
         console.log("Not a match, flipping back.");
-        firstPick.img.src = 'blank.jpg';
-        secondPick.img.src = 'blank.jpg';
+        firstPick.img.src = 'images/blank.jpg'; // Updated path
+        secondPick.img.src = 'images/blank.jpg'; // Updated path
     }
 
     firstPick = null;
