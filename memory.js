@@ -16,13 +16,13 @@ let lockBoard = false; // Prevents clicking during match check
 
 images.forEach((image, index) => {
     let img = document.createElement('img');
-    img.src = 'images/blank.jpg'; // Default blank image (located directly in the 'images/' folder)
+    img.src = 'images/blank.jpg'; // Default blank image
     img.dataset.index = index;
     
     img.onclick = () => {
         if (lockBoard || img.src !== window.location.origin + '/images/blank.jpg') return; // Prevent clicking revealed images
 
-        img.src = images[index]; // Reveal image
+        img.src = image; // Reveal the clicked image
 
         if (!firstPick) {
             firstPick = { img, index };
