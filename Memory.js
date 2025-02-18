@@ -3,14 +3,41 @@ const images = ['img1.jpg', 'img1.jpg', 'img2.jpg', 'img2.jpg', 'img3.jpg', 'img
 images.sort(() => Math.random() - 0.5);
 
 const grid = document.getElementById('grid');
+let firstPick = null;
+let secondPick = null;
 
 images.forEach((image, index) => {
     let img = document.createElement('img');
     img.src = 'blank.jpg';
     img.dataset.index = index;
+    
     img.onclick = () => {
-        console.log(`Image at index ${index} clicked`);
+        if (firstPick && secondPick) return;
+        if (firstPick && firstPick.index === index) return; 
+
         img.src = images[index];
+
+        if (!firstPick) {
+            firstPick = { img, index };
+        } else {
+            secondPick = { img, index };
+            setTimeout(checkMatch, 1000);
+        }
     };
+
     grid.appendChild(img);
 });
+
+
+function checkMatch() {
+    if (firstPick.index !== secondPick.index && images[firstPick.index] === images[secondPick.index]) {
+        console.log("It's a match!");
+    } else {
+        console.log("Not a match, flipping back.");
+        firstPick.img.src = 'blank.jpg';
+        secondPick.img.src = 'blank.jpg';
+    }
+
+    firstPick = null;
+    secondPick = null;
+}
