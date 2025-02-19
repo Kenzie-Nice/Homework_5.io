@@ -4,8 +4,8 @@ const imagePaths = [
     'images/tea-black-tea-drink-tea-cup-preview.jpg', 'images/tea-candy-green-tea-black-tea.jpg'
 ];
 
-const images = [...imagePaths, ...imagePaths]; // Duplicate each image for matching pairs
-images.sort(() => Math.random() - 0.5); // Shuffle images
+const images = [...imagePaths, ...imagePaths];
+images.sort(() => Math.random() - 0.5);
 
 const grid = document.getElementById('grid');
 let firstPick = null;
